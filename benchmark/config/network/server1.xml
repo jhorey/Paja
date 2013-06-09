@@ -1,0 +1,16 @@
+<configuration>
+  <property>
+    <name>network.id</name>
+    <value>s1</value>
+  </property>
+
+  <property>
+    <name>network.ip</name>
+    <value>localhost</value>
+  </property>
+
+  <property>
+    <name>network.port</name>
+    <value>9091</value>
+  </property>
+</configuration>

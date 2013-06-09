@@ -1,0 +1,16 @@
+<configuration>
+  <property>
+    <name>paja.id</name>
+    <value>s2</value>
+  </property>
+
+  <property>
+    <name>paja.log.dir</name>
+    <value>data/logs</value>
+  </property>
+
+  <property>
+    <name>paja.network.dir</name>
+    <value>config/network</value>
+  </property>
+</configuration>

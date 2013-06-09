@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<project name="paxos.benchmark" basedir="." default="all">
+  <!-- Log config file -->
+  <property name="log.file" value="log.config"/>  
+
+  <!-- JAR name -->
+  <property name="build.jar" value="pajabench.jar"/>
+
+  <!-- Global properties for this build -->
+  <property environment="env" />
+  <property name="paxos.dir" value="${env.PAXOS_HOME}"/>  
+  <property name="benchmark.dir" value="."/>
+  <property name="src.dir" value="src"/>
+  <property name="build.dir" value="classes"/>
+  <property name="doc.dir" value="doc"/>
+
+  <!-- Classpath -->
+  <path id="classpath">
+    <fileset dir="${paxos.dir}">
+      <include name="*.jar" />
+    </fileset>
+
+    <fileset dir="${benchmark.dir}">
+      <include name="pajabench.jar" />
+    </fileset>
+
+  </path>
+
+  <!-- Use this to compile and create jar file -->
+  <target name="all"
+	  depends="compile,jar">
+  </target>
+
+  <!-- Actual build target -->
+  <target name="compile">
+    <mkdir dir="${build.dir}"/>
+    <javac srcdir="${src.dir}" 
+	   destdir="${build.dir}" 
+	   classpathref="classpath" 
+	   includeantruntime="false" 
+	   debug="on"
+	   debuglevel="lines,vars,source">
+
+      <compilerarg value="-Xlint:unchecked" />
+    </javac>
+  </target>
+
+  <!-- Create a JAR file for distribution. -->
+  <target name="jar">
+    <jar destfile="${build.jar}"
+         index="true" filesetmanifest="mergewithoutmain">
+      <fileset dir="${build.dir}" />
+    </jar>
+  </target>
+
+  <!-- Start some servers -->
+  <target name="servers">
+    <java fork="true" classname="gov.ornl.paja.benchmark.Benchmark">
+      <classpath>
+	<path refid="classpath" />
+	<path location="${build.jar}" />
+      </classpath>
+      <arg value="server" />
+      <arg value="${config}" />
+      <sysproperty key="java.util.logging.config.file" value="${log.file}" />
+    </java>
+  </target>
+
+  <!-- Start some servers in fast mode -->
+  <target name="fastservers">
+    <java fork="true" classname="gov.ornl.paja.benchmark.Benchmark">
+      <classpath>
+	<path refid="classpath" />
+	<path location="${build.jar}" />
+      </classpath>
+      <arg value="fastserver" />
+      <arg value="${config}" />
+      <sysproperty key="java.util.logging.config.file" value="${log.file}" />
+    </java>
+  </target>
+
+  <!-- Start some clients -->
+  <target name="clients">
+    <java fork="true" classname="gov.ornl.paja.benchmark.Benchmark">
+      <classpath>
+	<path refid="classpath" />
+	<path location="${build.jar}" />
+      </classpath>
+      <arg value="client" />
+      <arg value="${config}" />
+      <arg value="${num}" />
+      <sysproperty key="java.util.logging.config.file" value="${log.file}" />
+    </java>
+  </target>
+
+  <!-- Start some fast clients -->
+  <target name="fastclients">
+    <java fork="true" classname="gov.ornl.paja.benchmark.Benchmark">
+      <classpath>
+	<path refid="classpath" />
+	<path location="${build.jar}" />
+      </classpath>
+      <arg value="fastclient" />
+      <arg value="${config}" />
+      <arg value="${num}" />
+      <sysproperty key="java.util.logging.config.file" value="${log.file}" />
+    </java>
+  </target>
+
+  <!-- Start some diagnosis -->
+  <target name="diagnose">
+    <java fork="true" classname="gov.ornl.paja.benchmark.Benchmark">
+      <classpath>
+	<path refid="classpath" />
+	<path location="${build.jar}" />
+      </classpath>
+      <arg value="diagnose" />
+      <arg value="${config}" />
+      <arg value="${cmd}" />
+      <sysproperty key="java.util.logging.config.file" value="${log.file}" />
+    </java>
+  </target>
+
+</project>
